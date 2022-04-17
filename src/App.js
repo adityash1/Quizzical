@@ -1,34 +1,29 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import StartPage from "./components/StartPage"
 import QuizPage from "./components/QuizPage"
 
+import questionsService from './services/questions'
+
+import { setQuestions } from './reducers/questionsReducer'
+
 const App = () => {
-  const [quiz, setQuiz] = useState(false);
-  const [quizData, setQuizData] = useState([])
+  const quiz = useSelector(state => state.quiz)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (quiz) {
-    axios.get('https://opentdb.com/api.php?amount=5&type=multiple')
-      .then(res => {
-        setQuizData(res.data.results);
+      questionsService.getQuestions().then(questions => {
+        dispatch(setQuestions(questions))
       })
-      .catch(err => {
-        console.log(err);
-      })
-  }}, [quiz]);
-
-  const startQuiz = () => {
-    setQuiz(true);
-  }
+    }
+  }, [dispatch, quiz]);
 
   return (
     <div>
       <div className="yellow-blob"></div>
       <div className="blue-blob"></div>
-      {!quiz && <StartPage onClick={startQuiz}/>}
-      {quiz && <QuizPage quizData={quizData}/>}
+      {quiz ? <QuizPage /> : <StartPage />}
     </div>
   );
 }

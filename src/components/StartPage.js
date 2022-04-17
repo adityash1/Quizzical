@@ -1,15 +1,20 @@
+import { useDispatch } from 'react-redux'
+import { setQuiz } from '../reducers/quizReducer'
+
 const StartPage = (props) => {
-  return (
-      <div className="startpage">
-        <div className="startpage-content">
-            <h1 className="startpage-header">Quizzical</h1>
-            <p className="startpage-description">Take this Challenge! Give answer to 5 random questions. 😉</p>
-            <div className="startpage-button-container">
-            <button className="startpage-button" onClick={props.onClick}>Start quiz!</button>
-            </div>
-        </div>
-        </div>
-    );
+  const dispatch = useDispatch()
+
+  const startQuiz = () => {
+    dispatch(setQuiz(true))
   }
+
+  return (
+    <div className="start-page">
+      <h1 className="start-page-title">Quizzical</h1>
+      <p className="start-page-description">Take this Challenge! Give answer to 5 random questions. 😉</p>
+      <button className="start-page-button" onClick={startQuiz}>Start Quiz</button>
+    </div>
+  );
+}
 
 export default StartPage;
